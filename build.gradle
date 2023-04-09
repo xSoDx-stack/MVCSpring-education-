@@ -6,7 +6,7 @@ plugins {
     id 'org.beryx.jlink' version '2.25.0'
 }
 
-group 'ru.example'
+group 'src'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -17,11 +17,11 @@ ext {
     junitVersion = '5.9.1'
 }
 ext {
-    sprinVersion = '6.0.7'
+    sprinVersion = '6.0.0'
 }
 
-sourceCompatibility = '20'
-targetCompatibility = '20'
+sourceCompatibility = '17'
+targetCompatibility = '17'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
@@ -45,8 +45,10 @@ dependencies {
     implementation("org.springframework:spring-context:${sprinVersion}")
     implementation("org.springframework:spring-web:${sprinVersion}")
     implementation("org.springframework:spring-webmvc:${sprinVersion}")
-    implementation("org.thymeleaf:thymeleaf-spring5:3.1.1.RELEASE")
+    implementation("org.springframework:spring-beans:${sprinVersion}")
+    implementation("org.thymeleaf:thymeleaf-spring6:3.1.1.RELEASE")
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.0.0")
+
 
 
 }
