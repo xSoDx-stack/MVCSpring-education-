@@ -5,7 +5,13 @@
     <title>Человек</title>
 </head>
 <body>
-<p th:text="${person.getName()}">VALUE</p>
-<p th:text="${person.getId()}">VALUE</p>
+<p>Hello, it's you data</p>
+<p>It's you name: </p><p th:text="${person.getName()}">VALUE</p>
+<p>It's you surname: </p><p th:text="${person.getSurname()}">VALUE</p>
+<p>It's you email: </p><p th:text="${person.getEmail()}">VALUE</p>
+
+<div>
+    <p><a th:href="@{/people}">back</a>
+</div>
 </body>
 </html>

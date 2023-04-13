@@ -12,9 +12,9 @@ public class PersonDAO {
     private final List<Person> people = new ArrayList<>();
 
     {
-        people.add(new Person(++PEOPLE_COUNT, "Tom"));
-        people.add(new Person(++PEOPLE_COUNT, "Gary"));
-        people.add(new Person(++PEOPLE_COUNT, "Bob"));
+        people.add(new Person(++PEOPLE_COUNT, "Tom", "Goward", "tom@mail.ru"));
+        people.add(new Person(++PEOPLE_COUNT, "Gary", "Fingers", "gary@mail.ru"));
+        people.add(new Person(++PEOPLE_COUNT, "Bob","Hilton", "bob@mail.ru"));
     }
     public List<Person> index(){
         return people;
@@ -22,4 +22,8 @@ public class PersonDAO {
     public Person show(int id){
         return people.stream().filter(person -> person.getId() == id).findAny().orElse(null);
     }
+     public void save(Person person){
+        person.setId(++PEOPLE_COUNT);
+        people.add(person);
+     }
 }
