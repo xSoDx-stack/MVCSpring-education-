@@ -1,7 +1,9 @@
 package ru.example.mvcspringeducation.model;
 
+import java.util.UUID;
+
 public class Person {
-    private Integer id;
+    private UUID id = UUID.randomUUID();
     private String name;
     private String surname;
     private String email;
@@ -10,17 +12,16 @@ public class Person {
 
     }
 
-    public Person(Integer id, String name, String surname, String email){
-        this.id = id;
+    public Person(String name, String surname, String email){
         this.name = name;
         this.surname = surname;
         this.email = email;
     }
 
-    public Integer getId(){
+    public UUID getId(){
         return id;
     }
-    public void setId(Integer id){
+    public void setId(UUID id){
         this.id = id;
     }
     public String getName(){

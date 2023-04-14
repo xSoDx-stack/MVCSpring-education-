@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.example.mvcspringeducation.dao.PersonDAO;
 import ru.example.mvcspringeducation.model.Person;
 
+import java.util.UUID;
+
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
@@ -19,28 +21,43 @@ public class PeopleController {
 
     @GetMapping()
     public String index(Model model){
-        System.out.println("Use controller index");
         model.addAttribute("people", personDAO.index());
         return "people/index";
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") Integer id, Model model){
-        System.out.println("Use controller show");
+    public String show(@PathVariable("id") UUID id, Model model){
         model.addAttribute("person",personDAO.show(id));
         return "people/show";
     }
 
     @GetMapping("/new")
     public String newPerson(@ModelAttribute("person") Person person){
-        System.out.println("Use controller new");
         return "people/new";
     }
 
     @PostMapping()
     public String create(@ModelAttribute("person") Person person){
-        System.out.println("Use controller create");
         personDAO.save(person);
         return "redirect:/people";
     }
+
+    @GetMapping("/{id}/edit")
+    public String edit(Model model, @PathVariable("id") UUID id){
+        model.addAttribute("person", personDAO.show(id));
+        return "people/edit";
+    }
+
+    @PatchMapping("/{id}")
+    public String update(@ModelAttribute("person") Person person,
+                         @PathVariable("id") UUID id){
+        personDAO.update(id, person);
+        return "redirect:/people";
+    }
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") UUID id){
+        personDAO.delete(id);
+        return "redirect:/people";
+    }
+
 }

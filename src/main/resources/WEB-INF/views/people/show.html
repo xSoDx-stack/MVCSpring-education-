@@ -6,11 +6,29 @@
 </head>
 <body>
 <p>Hello, it's you data</p>
-<p>It's you name: </p><p th:text="${person.getName()}">VALUE</p>
-<p>It's you surname: </p><p th:text="${person.getSurname()}">VALUE</p>
-<p>It's you email: </p><p th:text="${person.getEmail()}">VALUE</p>
-
+<table>
+    <tbody>
+    <tr>
+        <td>It's you name:</td>
+        <td th:text="${person.getName()}"></td>
+    </tr>
+    <tr>
+        <td>It's you surname:</td>
+        <td th:text="${person.getSurname()}">VALUE</td>
+    </tr>
+    <tr>
+        <td>It's you email:</td>
+        <td th:text="${person.getEmail()}">VALUE</td>
+    </tr>
+    </tbody>
+</table>
 <div>
+    <p><a th:href="@{{id}/edit(id=${person.getId()})}">Edit</a></p>
+
+    <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+        <input type="submit" value="Delete!"/>
+    </form>
+
     <p><a th:href="@{/people}">back</a>
 </div>
 </body>
