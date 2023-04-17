@@ -1,11 +1,22 @@
 package ru.example.mvcspringeducation.model;
 
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 import java.util.UUID;
 
 public class Person {
     private UUID id = UUID.randomUUID();
+    @NotEmpty(message = "Поле имени не должно быть пустым")
+    @Size(min = 2, max = 30, message = "Имя должно быть длинее 2х символов")
     private String name;
+    @NotEmpty(message = "Поле фамилия не должно быть пустым")
+    @Size(min = 2, max = 30, message = "Фамилия должна быть длинее 2х символов")
     private String surname;
+    @NotEmpty(message = "Поле почты не должно быть пустым")
+    @Email(message = "Неправильный формат почты")
     private String email;
 
     public Person(){
