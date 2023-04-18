@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.example.mvcspringeducation.dao.PersonDAO;
 import ru.example.mvcspringeducation.model.Person;
 
+import java.sql.SQLException;
 import java.util.UUID;
 
 @Controller
@@ -22,7 +23,7 @@ public class PeopleController {
     }
 
     @GetMapping()
-    public String index(Model model){
+    public String index(Model model) throws SQLException {
         model.addAttribute("people", personDAO.index());
         return "people/index";
     }
@@ -40,7 +41,7 @@ public class PeopleController {
 
     @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person,
-                         BindingResult bindingResult){
+                         BindingResult bindingResult) throws SQLException {
         if(bindingResult.hasErrors())
             return "people/new";
 

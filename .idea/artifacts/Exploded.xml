@@ -21,6 +21,7 @@
           <element id="library" level="project" name="Gradle: org.springframework:spring-beans:6.0.7" />
           <element id="library" level="project" name="Gradle: org.springframework:spring-core:6.0.7" />
           <element id="library" level="project" name="Gradle: org.thymeleaf:thymeleaf-spring6:3.1.1.RELEASE" />
+          <element id="library" level="project" name="Gradle: org.postgresql:postgresql:42.6.0" />
           <element id="library" level="project" name="Gradle: org.springframework:spring-aop:6.0.7" />
           <element id="library" level="project" name="Gradle: org.springframework:spring-expression:6.0.7" />
           <element id="library" level="project" name="Gradle: org.springframework.boot:spring-boot-starter:3.0.5" />
@@ -46,6 +47,7 @@
           <element id="library" level="project" name="Gradle: org.slf4j:jul-to-slf4j:2.0.7" />
           <element id="library" level="project" name="Gradle: ch.qos.logback:logback-core:1.4.6" />
           <element id="library" level="project" name="Gradle: org.apache.logging.log4j:log4j-api:2.19.0" />
+          <element id="library" level="project" name="Gradle: org.checkerframework:checker-qual:3.31.0" />
         </element>
       </element>
     </root>

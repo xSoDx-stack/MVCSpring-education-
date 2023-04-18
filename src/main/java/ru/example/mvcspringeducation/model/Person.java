@@ -20,7 +20,6 @@ public class Person {
     private String email;
 
     public Person(){
-
     }
 
     public Person(String name, String surname, String email){
@@ -29,11 +28,11 @@ public class Person {
         this.email = email;
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
     public UUID getId(){
         return id;
-    }
-    public void setId(UUID id){
-        this.id = id;
     }
     public String getName(){
         return name;
