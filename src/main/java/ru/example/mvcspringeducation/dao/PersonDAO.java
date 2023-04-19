@@ -33,47 +33,60 @@ public class PersonDAO {
 
     public List<Person> index() throws SQLException {
         List<Person> people = new ArrayList<>();
-        Statement statement = connection.createStatement();
-        String SQL = "SELECT * FROM Person";
-        ResultSet resultSet = statement.executeQuery(SQL);
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Person");
+        ResultSet resultSet = preparedStatement.executeQuery();
 
         while (resultSet.next()){
             Person person = new Person();
-
             person.setId(UUID.fromString(resultSet.getString("id")));
             person.setName(resultSet.getString("name"));
             person.setSurname(resultSet.getString("surname"));
             person.setEmail(resultSet.getString("email"));
             people.add(person);
-
         }
         return people;
     }
 
-
-    public Person show(UUID id){
-//        return people.stream().filter(p -> p.getId().equals(id)).findAny().orElse(null);
-        return null;
-    }
-     public void save(Person person) throws SQLException {
-        Statement statement = connection.createStatement();
+    public Person show(UUID id) throws SQLException {
         PreparedStatement preparedStatement =
-                connection.prepareStatement("INSERT INTO Person VALUES(uuid_generate_v4(),?,?,?)");
-        preparedStatement.setString(1, person.getName());
-        preparedStatement.setString(2, person.getSurname());
-        preparedStatement.setString(3, person.getEmail());
+                connection.prepareStatement("SELECT * FROM person WHERE id=?");
+        preparedStatement.setObject(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        Person person = new Person();
+        person.setId(id);
+        person.setName(resultSet.getString("name"));
+        person.setSurname(resultSet.getString("surname"));
+        person.setEmail(resultSet.getString("email"));
+        return person;
+    }
+
+     public void save(Person person) throws SQLException {
+        PreparedStatement preparedStatement =
+                connection.prepareStatement("INSERT INTO Person VALUES(?,?,?,?)");
+        preparedStatement.setObject(1, person.getId());
+        preparedStatement.setString(2, person.getName());
+        preparedStatement.setString(3, person.getSurname());
+        preparedStatement.setString(4, person.getEmail());
 
         preparedStatement.executeUpdate();
      }
 
-     public void update(UUID id, Person updatePerson){
-//        Person personToBeUpdated = show(id);
-//        personToBeUpdated.setName(updatePerson.getName());
-//        personToBeUpdated.setSurname(updatePerson.getSurname());
-//        personToBeUpdated.setEmail(updatePerson.getEmail());
+     public void update(UUID id, Person updatePerson) throws SQLException {
+        PreparedStatement preparedStatement =
+                connection.prepareStatement("UPDATE person SET name=?, surname=?, email=? WHERE id=?");
+         preparedStatement.setString(1, updatePerson.getName());
+         preparedStatement.setString(2, updatePerson.getSurname());
+         preparedStatement.setString(3, updatePerson.getEmail());
+         preparedStatement.setObject(4, id);
+         preparedStatement.executeUpdate();
+
      }
 
-     public void delete(UUID id){
-//        people.removeIf(p -> p.getId().equals(id));
+     public void delete(UUID id) throws SQLException {
+        PreparedStatement preparedStatement =
+                connection.prepareStatement("DELETE from person WHERE id=?");
+        preparedStatement.setObject(1,id);
+        preparedStatement.executeUpdate();
      }
 }

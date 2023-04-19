@@ -29,7 +29,7 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") UUID id, Model model){
+    public String show(@PathVariable("id") UUID id, Model model) throws SQLException {
         model.addAttribute("person",personDAO.show(id));
         return "people/show";
     }
@@ -50,7 +50,7 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") UUID id){
+    public String edit(Model model, @PathVariable("id") UUID id) throws SQLException {
         model.addAttribute("person", personDAO.show(id));
         return "people/edit";
     }
@@ -58,7 +58,7 @@ public class PeopleController {
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult,
-                         @PathVariable("id") UUID id){
+                         @PathVariable("id") UUID id) throws SQLException {
         if(bindingResult.hasErrors())
             return "people/edit";
 
@@ -66,7 +66,7 @@ public class PeopleController {
         return "redirect:/people";
     }
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") UUID id){
+    public String delete(@PathVariable("id") UUID id) throws SQLException {
         personDAO.delete(id);
         return "redirect:/people";
     }
