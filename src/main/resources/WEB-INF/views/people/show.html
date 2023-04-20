@@ -24,11 +24,9 @@
 </table>
 <div>
     <p><a th:href="@{{id}/edit(id=${person.getId()})}">Edit</a></p>
-
     <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
         <input type="submit" value="Delete!"/>
     </form>
-
     <p><a th:href="@{/people}">back</a>
 </div>
 </body>

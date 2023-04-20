@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.example.mvcspringeducation.dao.PersonDAO;
 import ru.example.mvcspringeducation.model.Person;
 
-import java.sql.SQLException;
 import java.util.UUID;
 
 @Controller
@@ -23,13 +22,13 @@ public class PeopleController {
     }
 
     @GetMapping()
-    public String index(Model model) throws SQLException {
+    public String index(Model model){
         model.addAttribute("people", personDAO.index());
         return "people/index";
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") UUID id, Model model) throws SQLException {
+    public String show(@PathVariable("id") UUID id, Model model){
         model.addAttribute("person",personDAO.show(id));
         return "people/show";
     }
@@ -41,7 +40,7 @@ public class PeopleController {
 
     @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person,
-                         BindingResult bindingResult) throws SQLException {
+                         BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return "people/new";
 
@@ -50,7 +49,7 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") UUID id) throws SQLException {
+    public String edit(Model model, @PathVariable("id") UUID id){
         model.addAttribute("person", personDAO.show(id));
         return "people/edit";
     }
@@ -58,7 +57,7 @@ public class PeopleController {
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult,
-                         @PathVariable("id") UUID id) throws SQLException {
+                         @PathVariable("id") UUID id){
         if(bindingResult.hasErrors())
             return "people/edit";
 
@@ -66,7 +65,7 @@ public class PeopleController {
         return "redirect:/people";
     }
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") UUID id) throws SQLException {
+    public String delete(@PathVariable("id") UUID id){
         personDAO.delete(id);
         return "redirect:/people";
     }
