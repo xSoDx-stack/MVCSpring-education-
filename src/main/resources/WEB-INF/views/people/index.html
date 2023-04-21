@@ -5,6 +5,7 @@
     <title>Все люди</title>
 </head>
 <body>
+<p><a th:href="@{/test-batch-update}">Create test person</a>
 
 <div th:each="person:${people}">
     <a th:href="@{/people/{id}(id=${person.getId()})}" th:text="${person.getName()}">user</a>
@@ -12,6 +13,7 @@
 <hr/>
 <div>
     <p><a th:href="@{/people/new}">Create person</a>
+
 </div>
 
 </body>
