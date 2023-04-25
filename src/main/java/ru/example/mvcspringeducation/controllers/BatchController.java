@@ -8,7 +8,7 @@ import ru.example.mvcspringeducation.dao.PersonDAO;
 
 @Controller
 @RequestMapping("/test-batch-update")
-public class BatchController {
+public class BatchController{
     private final PersonDAO personDAO;
 
     @Autowired

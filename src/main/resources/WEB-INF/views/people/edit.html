@@ -14,6 +14,10 @@
     <input type="text" th:field="*{surname}" id="surname"/>
     <div style="color: red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname error</div>
     <br/>
+    <label for="age">Enter surname</label>
+    <input type="text" th:field="*{age}" id="age"/>
+    <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Surname error</div>
+    <br/>
     <label for="email">Enter email</label>
     <input type="text" th:field="*{email}" id="email"/>
     <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
