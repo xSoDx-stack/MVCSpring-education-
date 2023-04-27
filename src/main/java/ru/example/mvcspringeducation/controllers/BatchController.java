@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.example.mvcspringeducation.dao.PersonDAO;
 
 @Controller
@@ -22,15 +23,13 @@ public class BatchController{
         return "batch/index";
     }
 
-    @GetMapping("/without")
-    public String withoutBatch(){
-        personDAO.testMultipleUpdate();
-        return "redirect:/people";
-    }
-
-    @GetMapping("/with")
-    public String withoutBatchUpdate(){
-        personDAO.testBatchUpdate();
+    @RequestMapping()
+    public String withoutBatchUpdate(
+            @RequestParam(value = "size") int size){
+        if (size < 0){
+            return "batch/index";
+        }
+        personDAO.testBatchUpdate(size);
         return "redirect:/people";
     }
 }

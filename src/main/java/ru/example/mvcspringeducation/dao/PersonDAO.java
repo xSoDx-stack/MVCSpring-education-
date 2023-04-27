@@ -54,7 +54,7 @@ public class PersonDAO {
     //////////////////тестируем производительность пакетной вставки//////
     ////////////////////////////////////////////////////////////////////
 
-    public void testMultipleUpdate(){
+/*    public void testMultipleUpdate(){
         List<Person> people = create1000People();
         long before = System.currentTimeMillis();
         for(Person person : people){
@@ -64,10 +64,10 @@ public class PersonDAO {
         long after = System.currentTimeMillis();
 
         System.out.println("Time: " + ((after - before)/60));
-    }
+    }*/
 
-    public void testBatchUpdate(){
-        List<Person> people = create1000People();
+    public void testBatchUpdate(int size){
+        List<Person> people = create1000People(size);
         long before = System.currentTimeMillis();
         jdbcTemplate.batchUpdate("INSERT INTO person(name, surname, age, email) VALUES (?,?,?,?)",
                 new BatchPreparedStatementSetter() {
@@ -88,12 +88,12 @@ public class PersonDAO {
         System.out.println("Time: " + ((after - before)/60));
     }
 
-    private List<Person> create1000People() {
+    private List<Person> create1000People(int size) {
         List<Person> people = new ArrayList<>();
         Faker faker = new Faker();
         FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en-US"),new RandomService());
 
-        for(int i = 0; i < 1000; i++){
+        for(int i = 0; i < size; i++){
             people.add(new Person(
                     faker.name().firstName(),
                     faker.name().lastName(),
