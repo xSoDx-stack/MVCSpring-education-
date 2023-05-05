@@ -12,10 +12,7 @@ import ru.example.mvcspringeducation.model.Person;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 
 
 @Component
@@ -36,40 +33,34 @@ public class PersonDAO {
                "SELECT * FROM Person WHERE id=?",new BeanPropertyRowMapper<>(Person.class),id)
                .stream().findAny().orElse(null);
     }
+    public Optional<Person> show(String email){
+        return jdbcTemplate.query(
+                "SELECT * FROM Person WHERE email=?", new BeanPropertyRowMapper<>(Person.class),email)
+                .stream().findAny();
+    }
 
      public void save(Person person){
-        jdbcTemplate.update("INSERT INTO person(name, surname, age, email) Values(?,?,?,?)",
-                person.getName(),person.getSurname(),person.getAge(), person.getEmail());
+        jdbcTemplate.update("INSERT INTO person(name, surname, age, email, address) Values(?,?,?,?,?)",
+                person.getName(),person.getSurname(),person.getAge(), person.getEmail(), person.getAddress());
      }
 
      public void update(UUID id, Person updatePerson){
-        jdbcTemplate.update("UPDATE person SET name=?, surname=?, age=?, email=? WHERE id=?",
-                updatePerson.getName(),updatePerson.getSurname(),updatePerson.getAge(), updatePerson.getEmail(),id);
+        jdbcTemplate.update("UPDATE person SET name=?, surname=?, age=?, email=?, address=? WHERE id=?",
+                updatePerson.getName(),updatePerson.getSurname(),updatePerson.getAge(), updatePerson.getEmail(),
+                updatePerson.getAddress(), id);
      }
 
      public void delete(UUID id){
         jdbcTemplate.update("DELETE FROM person WHERE id=?", id);
      }
      ////////////////////////////////////////////////////////////////////
-    //////////////////тестируем производительность пакетной вставки//////
+    //////////////////Наполнение таблицы тестовыми данными//////
     ////////////////////////////////////////////////////////////////////
-
-/*    public void testMultipleUpdate(){
-        List<Person> people = create1000People();
-        long before = System.currentTimeMillis();
-        for(Person person : people){
-            jdbcTemplate.update("INSERT INTO person(name, surname, age, email) Values(?,?,?,?)",
-                    person.getName(),person.getSurname(), person.getAge(), person.getEmail());
-        }
-        long after = System.currentTimeMillis();
-
-        System.out.println("Time: " + ((after - before)/60));
-    }*/
 
     public void testBatchUpdate(int size){
         List<Person> people = create1000People(size);
         long before = System.currentTimeMillis();
-        jdbcTemplate.batchUpdate("INSERT INTO person(name, surname, age, email) VALUES (?,?,?,?)",
+        jdbcTemplate.batchUpdate("INSERT INTO person(name, surname, age, email, address) VALUES (?,?,?,?,?)",
                 new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -77,6 +68,7 @@ public class PersonDAO {
                 ps.setString(2, people.get(i).getSurname());
                 ps.setInt(3, people.get(i).getAge());
                 ps.setString(4, people.get(i).getEmail());
+                ps.setString(5,people.get(i).getAddress());
             }
 
             @Override
@@ -91,14 +83,18 @@ public class PersonDAO {
     private List<Person> create1000People(int size) {
         List<Person> people = new ArrayList<>();
         Faker faker = new Faker();
-        FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en-US"),new RandomService());
+        FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en-US"),
+                new RandomService());
 
         for(int i = 0; i < size; i++){
             people.add(new Person(
                     faker.name().firstName(),
                     faker.name().lastName(),
                     faker.number().numberBetween(12,90),
-                    fakeValuesService.bothify("????##@gmail.com")));
+                    fakeValuesService.bothify("????##@gmail.com"),
+                    faker.address().fullAddress())
+                    );
+
         }
         return people;
     }
