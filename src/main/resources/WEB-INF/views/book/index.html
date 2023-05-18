@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Читатели библиотеки</title>
+</head>
+<body>
+<p><a th:href="@{/test-batch-update/book}">Создать книги для теста</a>
+<p><a th:href="@{/people}">Люди</a>
+<p><a th:href="@{/book/new}">Внести книгу</a>
+
+
+<div th:each="books:${book}">
+    <a th:href="@{/book/{id}(id=${books.getBook_id()})}" th:text="${books.getName()}">user</a>
+</div>
+</body>
+</html>

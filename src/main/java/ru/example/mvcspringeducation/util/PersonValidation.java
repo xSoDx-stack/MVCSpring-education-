@@ -26,8 +26,8 @@ public class PersonValidation implements Validator {
     public void validate(Object target, Errors errors) {
         Person person = (Person) target;
 
-        if(personDAO.show(person.getEmail()).isPresent()){
-            errors.rejectValue("email","","Эта почта уже используется");
+        if(personDAO.show(person.getFullName()).isPresent()){
+            errors.rejectValue("fullName","","Такой пользователь уже зарегестрирован");
         }
     }
 }

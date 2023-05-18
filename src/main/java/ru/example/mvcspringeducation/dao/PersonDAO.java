@@ -1,13 +1,12 @@
 package ru.example.mvcspringeducation.dao;
 
 import com.github.javafaker.Faker;
-import com.github.javafaker.service.FakeValuesService;
-import com.github.javafaker.service.RandomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.example.mvcspringeducation.model.Book;
 import ru.example.mvcspringeducation.model.Person;
 
 import java.sql.PreparedStatement;
@@ -25,79 +24,69 @@ public class PersonDAO {
     }
 
     public List<Person> index(){
-        return jdbcTemplate.query("SELECT * FROM Person", new BeanPropertyRowMapper<>(Person.class));
+        return jdbcTemplate.query(
+                "SELECT * FROM person", new BeanPropertyRowMapper<>(Person.class));
     }
 
-    public Person show(UUID id) {
+    public Person show(UUID person_id) {
        return jdbcTemplate.query(
-               "SELECT * FROM Person WHERE id=?",new BeanPropertyRowMapper<>(Person.class),id)
+               "SELECT * FROM Person WHERE person_id=?",new BeanPropertyRowMapper<>(Person.class), person_id)
                .stream().findAny().orElse(null);
     }
-    public Optional<Person> show(String email){
+    public List<Book> showPersonBook(UUID person_id){
         return jdbcTemplate.query(
-                "SELECT * FROM Person WHERE email=?", new BeanPropertyRowMapper<>(Person.class),email)
+                "SELECT * FROM book WHERE person_id=?", new BeanPropertyRowMapper<>(Book.class), person_id);
+    }
+
+    public Optional<Person> show(String ful_name){
+        return jdbcTemplate.query(
+                "SELECT * FROM Person WHERE full_name=?", new BeanPropertyRowMapper<>(Person.class), ful_name)
                 .stream().findAny();
     }
 
      public void save(Person person){
-        jdbcTemplate.update("INSERT INTO person(name, surname, age, email, address) Values(?,?,?,?,?)",
-                person.getName(),person.getSurname(),person.getAge(), person.getEmail(), person.getAddress());
+        jdbcTemplate.update("INSERT INTO person(full_name, age) Values(?,?)",
+                person.getFullName(),person.getAge());
      }
 
-     public void update(UUID id, Person updatePerson){
-        jdbcTemplate.update("UPDATE person SET name=?, surname=?, age=?, email=?, address=? WHERE id=?",
-                updatePerson.getName(),updatePerson.getSurname(),updatePerson.getAge(), updatePerson.getEmail(),
-                updatePerson.getAddress(), id);
+     public void update(UUID person_id, Person updatePerson){
+        jdbcTemplate.update("UPDATE person SET full_name=?,age=? WHERE person_id=?",
+                updatePerson.getFullName(),updatePerson.getAge(), person_id);
      }
 
-     public void delete(UUID id){
-        jdbcTemplate.update("DELETE FROM person WHERE id=?", id);
+     public void delete(UUID person_id){
+        jdbcTemplate.update("DELETE FROM person WHERE person_id=?", person_id);
      }
      ////////////////////////////////////////////////////////////////////
     //////////////////Наполнение таблицы тестовыми данными//////
     ////////////////////////////////////////////////////////////////////
 
     public void testBatchUpdate(int size){
-        List<Person> people = create1000People(size);
+        List<Person> people = createRandomPeople(size);
         long before = System.currentTimeMillis();
-        jdbcTemplate.batchUpdate("INSERT INTO person(name, surname, age, email, address) VALUES (?,?,?,?,?)",
+        jdbcTemplate.batchUpdate("INSERT INTO person(full_name, age) VALUES (?,?)",
                 new BatchPreparedStatementSetter() {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setString(1, people.get(i).getName());
-                ps.setString(2, people.get(i).getSurname());
-                ps.setInt(3, people.get(i).getAge());
-                ps.setString(4, people.get(i).getEmail());
-                ps.setString(5,people.get(i).getAddress());
+                ps.setString(1, people.get(i).getFullName());
+                ps.setInt(2, people.get(i).getAge());
             }
-
             @Override
             public int getBatchSize() {
                 return people.size();
             }
         });
-        long after = System.currentTimeMillis();
-        System.out.println("Time: " + ((after - before)/60));
     }
 
-    private List<Person> create1000People(int size) {
+    private List<Person> createRandomPeople(int size) {
         List<Person> people = new ArrayList<>();
-        Faker faker = new Faker();
-        FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en-US"),
-                new RandomService());
-
+        Faker faker = new Faker(new Locale("ru"));
         for(int i = 0; i < size; i++){
             people.add(new Person(
-                    faker.name().firstName(),
-                    faker.name().lastName(),
-                    faker.number().numberBetween(12,90),
-                    fakeValuesService.bothify("????##@gmail.com"),
-                    faker.address().fullAddress())
-                    );
-
+                    faker.name().fullName(),
+                    faker.number().numberBetween(1900,2020))
+            );
         }
         return people;
     }
-
-
 }

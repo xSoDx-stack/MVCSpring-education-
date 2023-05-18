@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание книг</title>
+</head>
+<body>
+<br/>
+<form th:method="POST" th:action="@{/test-batch-update/book}">
+    <br/>
+    <label for="size">Создать фэйковые книги</label>
+    <br/>
+    <input type="number" th:name="size" id="size"/>
+    <br/>
+    <br/>
+    <input type="submit" value="Создать!"/>
+</form>
+<br/>
+<p><a th:href="@{/book}">назад</a></p>
+</body>
+</html>

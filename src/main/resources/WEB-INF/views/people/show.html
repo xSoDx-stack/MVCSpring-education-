@@ -5,37 +5,17 @@
     <title>Человек</title>
 </head>
 <body>
-<p>Hello, it's you data</p>
-<table>
-    <tbody>
-    <tr>
-        <td>It's you name:</td>
-        <td th:text="${person.getName()}"></td>
-    </tr>
-    <tr>
-        <td>It's you surname:</td>
-        <td th:text="${person.getSurname()}">VALUE</td>
-    </tr>
-    <tr>
-        <td>It's you age:</td>
-        <td th:text="${person.getAge()}">VALUE</td>
-    </tr>
-    <tr>
-        <td>It's you email:</td>
-        <td th:text="${person.getEmail()}">VALUE</td>
-    </tr>
-    <tr>
-        <td>It's you address:</td>
-        <td th:text="${person.getAddress()}">VALUE</td>
-    </tr>
-    </tbody>
-</table>
+<h2>Страница пользователя</h2>
 <div>
-    <p><a th:href="@{{id}/edit(id=${person.getId()})}">Edit</a></p>
-    <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
-        <input type="submit" value="Delete!"/>
-    </form>
-    <p><a th:href="@{/people}">back</a>
+    <h4 th:text="${person.getFullName()}"/>
+    <h4 th:text="${person.getAge()}"/>
 </div>
+<form th:action="@{{id}/edit(id=${person.getPerson_id()})}">
+    <button>Редактировать</button>
+</form>
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getPerson_id()})}">
+    <input type="submit" value="Удалить!"/>
+</form>
+<p><a th:href="@{/people}">назад</a>
 </body>
 </html>
