@@ -8,7 +8,6 @@ private UUID book_id;
 private String name;
 private String author;
 private int year;
-private UUID person_id;
 
     public Book() {
     }
@@ -51,11 +50,4 @@ private UUID person_id;
         this.year = year;
     }
 
-    public UUID getPerson_id() {
-        return person_id;
-    }
-
-    public void setPerson_id(UUID person_id) {
-        this.person_id = person_id;
-    }
 }

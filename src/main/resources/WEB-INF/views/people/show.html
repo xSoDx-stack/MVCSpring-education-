@@ -5,16 +5,33 @@
     <title>Человек</title>
 </head>
 <body>
-<h2>Страница пользователя</h2>
+<h2>Страница пользователя:</h2>
 <div>
     <h4 th:text="${person.getFullName()}"/>
     <h4 th:text="${person.getAge()}"/>
 </div>
-<form th:action="@{{id}/edit(id=${person.getPerson_id()})}">
-    <button>Редактировать</button>
+<h3 th:if="${book.isEmpty()}">Человек не взял ещё  не одной книги</h3>
+
+<h3 th:if="${!book.isEmpty()}">Книги которые читает человек:</h3>
+<div th:each="books:${book}">
+    <table>
+        <tr>
+            <td th:text="${books.getName() + ', ' + books.getAuthor() + ', ' + books.getYear()}">book</td>
+            <td>
+                <form th:method="DELETE" th:action="@{/people/{id}/{book_id}/delete(book_id=${books.getBook_id()},id=${person.getPerson_id()})}">
+                    <input type="submit" value="Освободить книгу"/>
+                </form>
+            </td>
+        </tr>
+
+    </table>
+</div>
+<br/>
+<form th:method="GET" th:action="@{{id}/edit(id=${person.getPerson_id()})}">
+    <button>Редактировать человека</button>
 </form>
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getPerson_id()})}">
-    <input type="submit" value="Удалить!"/>
+    <input type="submit" value="Удалить человека!"/>
 </form>
 <p><a th:href="@{/people}">назад</a>
 </body>

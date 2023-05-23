@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.example.mvcspringeducation.dao.BookDAO;
 import ru.example.mvcspringeducation.dao.PersonDAO;
 import ru.example.mvcspringeducation.model.Person;
 import ru.example.mvcspringeducation.util.PersonValidation;
@@ -17,11 +18,14 @@ import java.util.UUID;
 public class PeopleController {
 
     private final PersonDAO personDAO;
+    private final BookDAO bookDAO;
     private final PersonValidation personValidation;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO, PersonValidation personValidation){
+    public PeopleController(PersonDAO personDAO, BookDAO bookDAO, PersonValidation personValidation){
         this.personDAO = personDAO;
+        this.bookDAO = bookDAO;
+
         this.personValidation = personValidation;
     }
 
@@ -33,9 +37,15 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") UUID person_id, Model model){
-        model.addAttribute("person", personDAO.show(person_id));
-        return "people/show";
+        if(personDAO.show(person_id) != null) {
+            model.addAttribute("person", personDAO.show(person_id));
+            model.addAttribute("book", personDAO.getOwnedBooks(person_id));
+            model.addAttribute("books", bookDAO.indexing());
+            return "people/show";
+        }
+        return "redirect:/people";
     }
+
 
     @GetMapping("/new")
     public String newPerson(@ModelAttribute("person") Person person){
@@ -77,5 +87,12 @@ public class PeopleController {
     public String delete(@PathVariable("person_id") UUID person_id){
         personDAO.delete(person_id);
         return "redirect:/people";
+    }
+
+    @DeleteMapping("/{id}/{book_id}/delete")
+    public String deletePersonBook(@PathVariable("id") UUID id,
+                                 @PathVariable("book_id") UUID book_id){
+        bookDAO.deleteOwnerBook(book_id);
+        return "redirect:/people/{id}";
     }
 }

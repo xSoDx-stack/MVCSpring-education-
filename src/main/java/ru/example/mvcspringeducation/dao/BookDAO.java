@@ -26,16 +26,23 @@ public class BookDAO {
         return jdbcTemplate.query(
                 "SELECT * FROM book", new BeanPropertyRowMapper<>(Book.class));
     }
+    public List<Book> indexing() {
+        return jdbcTemplate.query(
+                "SELECT * FROM book", new BeanPropertyRowMapper<>(Book.class));
+    }
+
 
     public Book show(UUID book_id){
         return jdbcTemplate.query(
                 "SELECT * FROM book WHERE book_id=?", new BeanPropertyRowMapper<>(Book.class), book_id)
                 .stream().findAny().orElse(null);
     }
-    public Person personBook (UUID id_person){
+
+    public Optional<Person> getOwnerBook (UUID book_id){
         return jdbcTemplate.query(
-               "SELECT * FROM person WHERE person_id=?", new BeanPropertyRowMapper<>(Person.class),id_person)
-                .stream().findAny().orElse(null);
+               "SELECT * FROM book JOIN person on book.person_id = person.person_id WHERE book_id=?",
+                        new BeanPropertyRowMapper<>(Person.class),book_id)
+                .stream().findAny();
     }
 
     public void save(Book book){
@@ -43,14 +50,24 @@ public class BookDAO {
                 "INSERT into book(name, author, year) VALUES(?,?,?)",
                 book.getName(), book.getAuthor(), book.getYear());
     }
-    public void update(UUID book_id, Book UpdateBook){
+
+    public void update(UUID book_id, Book updateBook){
         jdbcTemplate.update(
                 "UPDATE book SET name=?, author=?, year=? WHERE book_id=?",
-                UpdateBook.getName(), UpdateBook.getAuthor(),UpdateBook.getYear(),book_id);
+                updateBook.getName(), updateBook.getAuthor(),updateBook.getYear(),book_id);
     }
-
     public void delete(UUID book_id){
         jdbcTemplate.update("DELETE FROM book WHERE book_id=?", book_id);
+    }
+
+    public void deleteOwnerBook(UUID book_id){
+        jdbcTemplate.update(
+                "UPDATE book SET person_id=null WHERE book_id=?",book_id);
+    }
+
+    public void appointOwnerBook(UUID book_id, UUID person_id){
+        jdbcTemplate.update(
+                "UPDATE book SET person_id=? WHERE book_id=?", person_id ,book_id);
     }
 
     public void BatchUpdate(int size){
