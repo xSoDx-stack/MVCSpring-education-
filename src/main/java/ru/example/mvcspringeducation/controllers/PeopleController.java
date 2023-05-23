@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.example.mvcspringeducation.dao.BookDAO;
 import ru.example.mvcspringeducation.dao.PersonDAO;
+import ru.example.mvcspringeducation.model.Book;
 import ru.example.mvcspringeducation.model.Person;
 import ru.example.mvcspringeducation.util.PersonValidation;
 
@@ -36,11 +37,12 @@ public class PeopleController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") UUID person_id, Model model){
+    public String show(@PathVariable("id") UUID person_id, Model model,
+                       @ModelAttribute("books") Book book){
         if(personDAO.show(person_id) != null) {
             model.addAttribute("person", personDAO.show(person_id));
             model.addAttribute("book", personDAO.getOwnedBooks(person_id));
-            model.addAttribute("books", bookDAO.indexing());
+            model.addAttribute("noPersonBooks", bookDAO.noBookPerson());
             return "people/show";
         }
         return "redirect:/people";
@@ -93,6 +95,12 @@ public class PeopleController {
     public String deletePersonBook(@PathVariable("id") UUID id,
                                  @PathVariable("book_id") UUID book_id){
         bookDAO.deleteOwnerBook(book_id);
+        return "redirect:/people/{id}";
+    }
+    @PatchMapping("/{id}/appoint")
+    public String makeBook(@PathVariable("id") UUID person_id,
+                           @ModelAttribute("books") Book books){
+        bookDAO.appointOwnerBook(books.getBook_id(), person_id);
         return "redirect:/people/{id}";
     }
 }

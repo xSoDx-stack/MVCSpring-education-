@@ -10,7 +10,7 @@
     <h4 th:text="${person.getFullName()}"/>
     <h4 th:text="${person.getAge()}"/>
 </div>
-<h3 th:if="${book.isEmpty()}">Человек не взял ещё  не одной книги</h3>
+<h3 th:if="${book.isEmpty()}">Человек не взял ещё не одной книги</h3>
 
 <h3 th:if="${!book.isEmpty()}">Книги которые читает человек:</h3>
 <div th:each="books:${book}">
@@ -23,10 +23,21 @@
                 </form>
             </td>
         </tr>
-
     </table>
 </div>
-<br/>
+<hr/>
+<div th:if="${!noPersonBooks.isEmpty()}">
+    <form th:method="PATCH" th:action="@{/people/{id}/appoint(id=${person.getPerson_id()})}">
+        <label for="book">Выберите книгу</label>
+        <select th:object="${books}" th:field="*{book_id}" id="book">
+            <option  th:each="books:${noPersonBooks}" th:value="${books.getBook_id()}" th:text="${books.getName()}">
+            </option>
+        </select>
+        <input type="submit" value="Назначить книгу!"/>
+    </form>
+    <br/>
+    <hr/>
+</div>
 <form th:method="GET" th:action="@{{id}/edit(id=${person.getPerson_id()})}">
     <button>Редактировать человека</button>
 </form>

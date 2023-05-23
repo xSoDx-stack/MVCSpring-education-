@@ -26,9 +26,9 @@ public class BookDAO {
         return jdbcTemplate.query(
                 "SELECT * FROM book", new BeanPropertyRowMapper<>(Book.class));
     }
-    public List<Book> indexing() {
+    public List<Book> noBookPerson() {
         return jdbcTemplate.query(
-                "SELECT * FROM book", new BeanPropertyRowMapper<>(Book.class));
+                "SELECT * FROM book WHERE book.person_id is null ", new BeanPropertyRowMapper<>(Book.class));
     }
 
 
@@ -100,9 +100,6 @@ public class BookDAO {
         }
         return books;
     }
-
-
-
 }
 
 

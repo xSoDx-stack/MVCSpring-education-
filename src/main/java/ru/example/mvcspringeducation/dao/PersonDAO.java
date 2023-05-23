@@ -30,7 +30,7 @@ public class PersonDAO {
 
     public Person show(UUID person_id) {
        return jdbcTemplate.query(
-               "SELECT * FROM Person WHERE person_id=?",new BeanPropertyRowMapper<>(Person.class), person_id)
+               "SELECT * FROM person WHERE person_id=?",new BeanPropertyRowMapper<>(Person.class), person_id)
                .stream().findAny().orElse(null);
     }
     public List<Book> getOwnedBooks(UUID person_id){
@@ -41,7 +41,7 @@ public class PersonDAO {
 
     public Optional<Person> show(String ful_name){
         return jdbcTemplate.query(
-                "SELECT * FROM Person WHERE full_name=?", new BeanPropertyRowMapper<>(Person.class), ful_name)
+                "SELECT * FROM person WHERE full_name=?", new BeanPropertyRowMapper<>(Person.class), ful_name)
                 .stream().findAny();
     }
 
